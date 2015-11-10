@@ -157,6 +157,11 @@ struct CRGB {
         hsv2rgb_rainbow( rhs, *this);
     }
 
+  inline operator uint16_t() __attribute__((always_inline))
+    {
+      return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+    }
+
     // allow assignment from one RGB struct to another
 	inline CRGB& operator= (const CRGB& rhs) __attribute__((always_inline))
     {
