@@ -15,20 +15,19 @@ public:
 public:
 
   /// PixelSet copy constructor
-  inline CPixelView(const CPixelView & other) : leds(other.leds), len(other.len), dir(other.dir), end_pos(other.end_pos) {}
+  inline CPixelView(const CPixelView & other) : dir(other.dir), len(other.len), leds(other.leds), end_pos(other.end_pos) {}
 
   /// pixelset constructor for a pixel set starting at the given PIXEL_TYPE* and going for _len leds.  Note that the length
   /// can be backwards, creating a PixelSet that walks backwards over the data
   /// @param leds point to the raw led data
   /// @param len how many leds in this set
-  inline CPixelView(PIXEL_TYPE *_leds, int _len) : leds(_leds), len(_len), dir(_len < 0 ? -1 : 1), end_pos(_leds + _len) {}
+  inline CPixelView(PIXEL_TYPE *_leds, int _len) : dir(_len < 0 ? -1 : 1), len(_len), leds(_leds), end_pos(_leds + _len) {}
 
   /// PixelSet constructor for the given set of leds, with start and end boundaries.  Note that start can be after
   /// end, resulting in a set that will iterate backwards
   /// @param leds point to the raw led data
   /// @param start the start index of the leds for this array
   /// @param end the end index of the leds for this array
-  inline CPixelView(PIXEL_TYPE *_leds, int _start, int _end) : leds(_leds), dir(((_end-_start)<0) ? -1 : 1), len((_end - _start) + dir), end_pos(_leds + len) {}
 
   /// Get the size of this set
   /// @return the size of the set
@@ -93,6 +92,7 @@ public:
   /// Add every pixel in the other set to this set
   inline CPixelView & operator+=(CPixelView & rhs) { for(iterator pixel = begin(), rhspixel = rhs.begin(), _end = end(), rhs_end = rhs.end(); (pixel != _end) && (rhspixel != rhs_end); ++pixel, ++rhspixel) { (*pixel) += (*rhspixel); } return *this; }
 
+  inline CPixelView & operator+=(PIXEL_TYPE & col) { for(iterator pixel = begin(),  _end = end(); (pixel != _end); ++pixel){ *pixel += col;} return *this;}
   /// Subtract the passed in value from r,g,b for all pixels in this set
   inline CPixelView & subFromRGB(uint8_t inc) { for(iterator pixel = begin(), _end = end(); pixel != _end; ++pixel) { (*pixel) -= inc; } return *this; }
   /// Subtract every pixel in the other set from this set
