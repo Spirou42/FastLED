@@ -1,6 +1,8 @@
 #ifndef __INC_PIXELSET_H
 #define __INC_PIXELSET_H
 
+#include "FastLED.h"
+
 /// Represents a set of CRGB led objects.  Provides the [] array operator, and works like a normal array in that case.
 /// This should be kept in sync with the set of functions provided by CRGB as well as functions in colorutils.  Note
 /// that a pixel set is a window into another set of led data, it is not its own set of led data.
@@ -28,7 +30,7 @@ public:
   /// @param leds point to the raw led data
   /// @param start the start index of the leds for this array
   /// @param end the end index of the leds for this array
-  inline CPixelView(PIXEL_TYPE *_leds, int _start, int _end) : dir(((_end-_start)<0) ? -1 : 1), len((_end - _start) + dir), leds(_leds), end_pos(_leds + len) {}
+  inline CPixelView(PIXEL_TYPE *_leds, int _start, int _end) : dir(((_end-_start)<0) ? -1 : 1), len((_end - _start) + dir), leds(_leds + _start), end_pos(_leds + _start + len) {}
 
   /// Get the size of this set
   /// @return the size of the set
@@ -51,7 +53,7 @@ public:
   /// result in a reverse ordering for many functions (useful for mirroring)
   /// @param start the first element from this set for the new subset
   /// @param end the last element for the new subset
-  inline CPixelView operator()(int start, int end) { return CPixelView(leds+start, start, end); }
+  inline CPixelView operator()(int start, int end) { return CPixelView(leds, start, end); }
 
   /// Access an inclusive subset of the leds in this set, starting from the first.
   /// @param end the last element for the new subset
@@ -71,11 +73,14 @@ public:
   }
 
 
- //  void dump() const {
- //    Serial.print("len: "); Serial.print(len); Serial.print(", dir:"); Serial.print((int)dir);
- //    Serial.print(", range:"); Serial.print((uint32_t)leds); Serial.print("-"); Serial.print((uint32_t)end_pos);
- //    Serial.print(", diff:"); Serial.print((int32_t)(end_pos - leds));
- // }
+  void dump() const {
+/**
+    Serial.print("len: "); Serial.print(len); Serial.print(", dir:"); Serial.print((int)dir);
+    Serial.print(", range:"); Serial.print((uint32_t)leds); Serial.print("-"); Serial.print((uint32_t)end_pos);
+    Serial.print(", diff:"); Serial.print((int32_t)(end_pos - leds));
+    Serial.println("");
+ **/
+ }
 
   /// Copy the contents of the passed in set to our set.  Note if one set is smaller than the other, only the
   /// smallest number of items will be copied over.

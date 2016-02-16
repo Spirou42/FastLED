@@ -86,6 +86,11 @@ void CFastLED::showColor(const struct CRGB & color, uint8_t scale) {
 	while(m_nMinMicros && ((micros()-lastshow) < m_nMinMicros));
 	lastshow = micros();
 
+	// If we have a function for computing power, use it!
+	if(m_pPowerFunc) {
+		scale = (*m_pPowerFunc)(scale, m_nPowerData);
+	}
+
 	CLEDController *pCur = CLEDController::head();
 	while(pCur) {
 		uint8_t d = pCur->getDither();
@@ -114,14 +119,18 @@ void CFastLED::clearData() {
 
 void CFastLED::delay(unsigned long ms) {
 	unsigned long start = millis();
-	while((millis()-start) < ms) {
+        do {
 #ifndef FASTLED_ACCURATE_CLOCK
 		// make sure to allow at least one ms to pass to ensure the clock moves
 		// forward
 		::delay(1);
 #endif
 		show();
+#if defined(ARDUINO) && (ARDUINO > 150)
+		yield();
+#endif
 	}
+	while((millis()-start) < ms);
 }
 
 void CFastLED::setTemperature(const struct CRGB & temp) {
@@ -225,7 +234,10 @@ extern "C" int atexit(void (* /*func*/ )()) { return 0; }
 #ifdef NEED_CXX_BITS
 namespace __cxxabiv1
 {
+	#ifndef ESP8266
 	extern "C" void __cxa_pure_virtual (void) {}
+	#endif
+	
 	/* guard variables */
 
 	/* The ABI requires a 64-bit type.  */

@@ -30,9 +30,9 @@ public:
 
 	inline static void toggle() __attribute__ ((always_inline)) { _PIN::r() = _MASK; }
 
-	inline static void hi(register port_ptr_t port) __attribute__ ((always_inline)) { hi(); }
-	inline static void lo(register port_ptr_t port) __attribute__ ((always_inline)) { lo(); }
-	inline static void fastset(register port_ptr_t port, register uint8_t val) __attribute__ ((always_inline)) { set(val); }
+	inline static void hi(register port_ptr_t /*port*/) __attribute__ ((always_inline)) { hi(); }
+	inline static void lo(register port_ptr_t /*port*/) __attribute__ ((always_inline)) { lo(); }
+	inline static void fastset(register port_ptr_t /*port*/, register uint8_t val) __attribute__ ((always_inline)) { set(val); }
 
 	inline static port_t hival() __attribute__ ((always_inline)) { return _PORT::r() | _MASK; }
 	inline static port_t loval() __attribute__ ((always_inline)) { return _PORT::r() & ~_MASK; }
@@ -141,8 +141,10 @@ _DEFPIN_AVR(16, 0x04, C); _DEFPIN_AVR(17, 0x08, C); _DEFPIN_AVR(18, 0x10, C); _D
 #define AVR_HARDWARE_SPI 1
 #define HAS_HARDWARE_PIN_SUPPORT 1
 
+#ifndef __AVR_ATmega8__
 #define SPI_UART0_DATA 1
 #define SPI_UART0_CLOCK 4
+#endif
 
 #elif defined(__AVR_ATmega1284P__)
 
@@ -161,6 +163,28 @@ _DEFPIN_AVR(28, 1<<4, A); _DEFPIN_AVR(29, 1<<5, A); _DEFPIN_AVR(30, 1<<6, A); _D
 #define SPI_DATA 5
 #define SPI_CLOCK 7
 #define SPI_SELECT 4
+#define AVR_HARDWARE_SPI 1
+#define HAS_HARDWARE_PIN_SUPPORT 1
+
+#elif  defined(__AVR_ATmega128RFA1__) || defined(__AVR_ATmega256RFR2__)
+
+// AKA the Pinoccio 
+
+_IO(A); _IO(B); _IO(C); _IO(D); _IO(E); _IO(F);
+
+_DEFPIN_AVR( 0, 1<<0, E); _DEFPIN_AVR( 1, 1<<1, E); _DEFPIN_AVR( 2, 1<<7, B); _DEFPIN_AVR( 3, 1<<3, E); 
+_DEFPIN_AVR( 4, 1<<4, E); _DEFPIN_AVR( 5, 1<<5, E); _DEFPIN_AVR( 6, 1<<2, E); _DEFPIN_AVR( 7, 1<<6, E); 
+_DEFPIN_AVR( 8, 1<<5, D); _DEFPIN_AVR( 9, 1<<0, B); _DEFPIN_AVR(10, 1<<2, B); _DEFPIN_AVR(11, 1<<3, B); 
+_DEFPIN_AVR(12, 1<<1, B); _DEFPIN_AVR(13, 1<<2, D); _DEFPIN_AVR(14, 1<<3, D); _DEFPIN_AVR(15, 1<<0, D); 
+_DEFPIN_AVR(16, 1<<1, D); _DEFPIN_AVR(17, 1<<4, D); _DEFPIN_AVR(18, 1<<7, E); _DEFPIN_AVR(19, 1<<6, D); 
+_DEFPIN_AVR(20, 1<<7, D); _DEFPIN_AVR(21, 1<<4, B); _DEFPIN_AVR(22, 1<<5, B); _DEFPIN_AVR(23, 1<<6, B); 
+_DEFPIN_AVR(24, 1<<0, F); _DEFPIN_AVR(25, 1<<1, F); _DEFPIN_AVR(26, 1<<2, F); _DEFPIN_AVR(27, 1<<3, F); 
+_DEFPIN_AVR(28, 1<<4, F); _DEFPIN_AVR(29, 1<<5, F); _DEFPIN_AVR(30, 1<<6, F); _DEFPIN_AVR(31, 1<<7, F); 
+
+#define SPI_DATA 10
+#define SPI_CLOCK 12
+#define SPI_SELECT 9
+
 #define AVR_HARDWARE_SPI 1
 #define HAS_HARDWARE_PIN_SUPPORT 1
 
