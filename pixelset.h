@@ -28,6 +28,7 @@ public:
   /// @param leds point to the raw led data
   /// @param start the start index of the leds for this array
   /// @param end the end index of the leds for this array
+  inline CPixelView(PIXEL_TYPE *_leds, int _start, int _end) : dir(((_end-_start)<0) ? -1 : 1), len((_end - _start) + dir), leds(_leds), end_pos(_leds + len) {}
 
   /// Get the size of this set
   /// @return the size of the set
@@ -114,6 +115,24 @@ public:
   inline CPixelView & operator>>=(uint8_t d) { for(iterator pixel = begin(), _end = end(); pixel != _end; ++pixel) { (*pixel) >>= d; } return *this; }
   /// Multiply every led in this set by the given value
   inline CPixelView & operator*=(uint8_t d) { for(iterator pixel = begin(), _end = end(); pixel != _end; ++pixel) { (*pixel) *= d; } return *this; }
+
+  // inline CPixelView& operator*=(const CRGB &col)
+  // {
+  //   bool blend =
+  //
+  //   for(iterator pixel = begin(),_end = end();pixel != _end;++pixel){
+  //     if((*pixel)){
+  //       Serial.println("Blend");
+  //       //*pixel = col;
+  //       ::nblend((*pixel),col,(fract8)127);
+  //     }else{
+  //       Serial.println("Assign");
+  //       *pixel = col;
+  //     }
+  //   }
+  // return *this;
+  // }
+
 
   /// Scale every led by the given scale
   inline CPixelView & nscale8_video(uint8_t scaledown) { for(iterator pixel = begin(), _end = end(); pixel != _end; ++pixel) { (*pixel).nscale8_video(scaledown); } return *this;}
