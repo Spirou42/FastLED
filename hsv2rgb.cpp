@@ -272,6 +272,7 @@ void hsv2rgb_spectrum( const CHSV& hsv, CRGB& rgb)
 
 #define K255 255
 #define K171 171
+#define K170 170
 #define K85  85
 
 void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
@@ -320,7 +321,7 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
 #endif
     }
     
-    uint8_t third = scale8( offset8, (256 / 3));
+    uint8_t third = scale8( offset8, (256 / 3)); // max = 85
     
     uint8_t r, g, b;
     
@@ -346,9 +347,9 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
                     FORCE_REFERENCE(b);
                 }
                 if( Y2 ) {
-                    r = K171 + third;
+                    r = K170 + third;
                     //uint8_t twothirds = (third << 1);
-                    uint8_t twothirds = scale8( offset8, ((256 * 2) / 3));
+                    uint8_t twothirds = scale8( offset8, ((256 * 2) / 3)); // max=170
                     g = K85 + twothirds;
                     b = 0;
                     FORCE_REFERENCE(b);
@@ -362,9 +363,9 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
                 //case 2: // Y -> G
                 if( Y1 ) {
                     //uint8_t twothirds = (third << 1);
-                    uint8_t twothirds = scale8( offset8, ((256 * 2) / 3));
+                    uint8_t twothirds = scale8( offset8, ((256 * 2) / 3)); // max=170
                     r = K171 - twothirds;
-                    g = K171 + third;
+                    g = K170 + third;
                     b = 0;
                     FORCE_REFERENCE(b);
                 }
@@ -394,8 +395,8 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
                 r = 0;
                 FORCE_REFERENCE(r);
                 //uint8_t twothirds = (third << 1);
-                uint8_t twothirds = scale8( offset8, ((256 * 2) / 3));
-                g = K171 - twothirds;
+                uint8_t twothirds = scale8( offset8, ((256 * 2) / 3)); // max=170
+                g = K171 - twothirds; //K170?
                 b = K85  + twothirds;
                 
             } else {
@@ -419,7 +420,7 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
             } else {
                 // 111
                 //case 7: // K -> R
-                r = K171 + third;
+                r = K170 + third;
                 g = 0;
                 FORCE_REFERENCE(g);
                 b = K85 - third;
@@ -440,9 +441,15 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
             r = 255; b = 255; g = 255;
         } else {
             //nscale8x3_video( r, g, b, sat);
+#if (FASTLED_SCALE8_FIXED==1)
+            if( r ) r = scale8_LEAVING_R1_DIRTY( r, sat);
+            if( g ) g = scale8_LEAVING_R1_DIRTY( g, sat);
+            if( b ) b = scale8_LEAVING_R1_DIRTY( b, sat);
+#else
             if( r ) r = scale8_LEAVING_R1_DIRTY( r, sat) + 1;
             if( g ) g = scale8_LEAVING_R1_DIRTY( g, sat) + 1;
             if( b ) b = scale8_LEAVING_R1_DIRTY( b, sat) + 1;
+#endif
             cleanup_R1();
             
             uint8_t desat = 255 - sat;
@@ -463,9 +470,15 @@ void hsv2rgb_rainbow( const CHSV& hsv, CRGB& rgb)
             r=0; g=0; b=0;
         } else {
             // nscale8x3_video( r, g, b, val);
+#if (FASTLED_SCALE8_FIXED==1)
+            if( r ) r = scale8_LEAVING_R1_DIRTY( r, val);
+            if( g ) g = scale8_LEAVING_R1_DIRTY( g, val);
+            if( b ) b = scale8_LEAVING_R1_DIRTY( b, val);
+#else
             if( r ) r = scale8_LEAVING_R1_DIRTY( r, val) + 1;
             if( g ) g = scale8_LEAVING_R1_DIRTY( g, val) + 1;
             if( b ) b = scale8_LEAVING_R1_DIRTY( b, val) + 1;
+#endif
             cleanup_R1();
         }
     }
