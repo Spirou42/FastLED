@@ -16,6 +16,9 @@ CLEDController *CLEDController::m_pHead = NULL;
 CLEDController *CLEDController::m_pTail = NULL;
 static uint32_t lastshow = 0;
 
+uint32_t _frame_cnt=0;
+uint32_t _retry_cnt=0;
+
 // uint32_t CRGB::Squant = ((uint32_t)((__TIME__[4]-'0') * 28))<<16 | ((__TIME__[6]-'0')*50)<<8 | ((__TIME__[7]-'0')*28);
 
 CFastLED::CFastLED() {
@@ -126,7 +129,7 @@ void CFastLED::delay(unsigned long ms) {
 		::delay(1);
 #endif
 		show();
-#if defined(ARDUINO) && (ARDUINO > 150) && !defined(IS_BEAN)
+#if defined(ARDUINO) && (ARDUINO > 150) && !defined(IS_BEAN) && !defined (ARDUINO_AVR_DIGISPARK)
 		yield();
 #endif
 	}
@@ -237,7 +240,7 @@ namespace __cxxabiv1
 	#ifndef ESP8266
 	extern "C" void __cxa_pure_virtual (void) {}
 	#endif
-	
+
 	/* guard variables */
 
 	/* The ABI requires a 64-bit type.  */

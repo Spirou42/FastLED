@@ -1,4 +1,10 @@
-FastLED3.1.2pre
+3.1.5
+* Fix due parallel output build issue
+
+3.1.4
+* fix digispark avr build issue
+
+FastLED3.1.3
 ===============
 
 * Add SK6822 timings
@@ -8,6 +14,7 @@ FastLED3.1.2pre
 * Fixed noise discontinuity 
 * Add wino board support
 * Fix scale8 (so now, scale8(255,255) == 255, not 254!)
+* Add ESP8266 parallel output support 
 
 
 FastLED3.1.1

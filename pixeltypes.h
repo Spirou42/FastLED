@@ -491,7 +491,7 @@ struct CRGB {
     }
 
     /// return a new CRGB object after performing a linear interpolation between this object and the passed in object
-    inline CRGB lerp8( CRGB & other, fract8 frac)
+    inline CRGB lerp8( const CRGB& other, fract8 frac) const
     {
       CRGB ret;
 
@@ -503,7 +503,7 @@ struct CRGB {
     }
 
     /// return a new CRGB object after performing a linear interpolation between this object and the passed in object
-    inline CRGB lerp16( CRGB & other, fract16 frac)
+    inline CRGB lerp16( const CRGB& other, fract16 frac) const
     {
       CRGB ret;
 

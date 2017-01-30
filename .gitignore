@@ -1,3 +1,6 @@
 html/
 
 .DS_Store
+
+*.gch
+
