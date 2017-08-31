@@ -10,6 +10,9 @@
 #elif defined(__MK20DX128__) || defined(__MK20DX256__)
 // Include k20/T3 headers
 #include "platforms/arm/k20/led_sysdefs_arm_k20.h"
+#elif defined(__MK66FX1M0__)
+// Include k66/T3.6 headers
+#include "platforms/arm/k66/led_sysdefs_arm_k66.h"
 #elif defined(__MKL26Z64__)
 // Include kl26/T-LC headers
 #include "platforms/arm/kl26/led_sysdefs_arm_kl26.h"
@@ -22,6 +25,8 @@
 #include "platforms/arm/d21/led_sysdefs_arm_d21.h"
 #elif defined(ESP8266)
 #include "platforms/esp/8266/led_sysdefs_esp8266.h"
+#elif defined(ESP32)
+#include "platforms/esp/32/led_sysdefs_esp32.h"
 #else
 // AVR platforms
 #include "platforms/avr/led_sysdefs_avr.h"
