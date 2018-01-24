@@ -783,9 +783,10 @@ LIB8STATIC uint8_t squarewave8( uint8_t in, uint8_t pulsewidth=128)
 
 /// Template class for represneting fractional ints.
 template<class T, int F, int I> class q {
+public:
   T i:I;
   T f:F;
-public:
+
   q(float fx) { i = fx; f = (fx-i) * (1<<F); }
   q(uint8_t _i, uint8_t _f) {i=_i; f=_f; }
   uint32_t operator*(uint32_t v) { return (v*i) + ((v*f)>>F); }
