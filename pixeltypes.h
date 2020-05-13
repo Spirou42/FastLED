@@ -38,6 +38,18 @@ struct CHSV {
 		uint8_t raw[3];
 	};
 
+    /// Array access operator to index into the chsv object
+	inline uint8_t& operator[] (uint8_t x) __attribute__((always_inline))
+    {
+        return raw[x];
+    }
+
+    /// Array access operator to index into the chsv object
+    inline const uint8_t& operator[] (uint8_t x) const __attribute__((always_inline))
+    {
+        return raw[x];
+    }
+
     /// default values are UNITIALIZED
     inline CHSV() __attribute__((always_inline))
     {
@@ -106,7 +118,7 @@ struct CRGB {
 		uint8_t raw[3];
 	};
 
-  /// Array access operator to index into the crgb object
+    /// Array access operator to index into the crgb object
 	inline uint8_t& operator[] (uint8_t x) __attribute__((always_inline))
     {
         return raw[x];
@@ -484,10 +496,14 @@ struct CRGB {
         uint8_t max = red;
         if( green > max) max = green;
         if( blue > max) max = blue;
-        uint16_t factor = ((uint16_t)(limit) * 256) / max;
-        red =   (red   * factor) / 256;
-        green = (green * factor) / 256;
-        blue =  (blue  * factor) / 256;
+
+        // stop div/0 when color is black
+        if(max > 0) {
+            uint16_t factor = ((uint16_t)(limit) * 256) / max;
+            red =   (red   * factor) / 256;
+            green = (green * factor) / 256;
+            blue =  (blue  * factor) / 256;
+        }
     }
 
     /// return a new CRGB object after performing a linear interpolation between this object and the passed in object
